@@ -92,7 +92,7 @@ y_pred = (model.predict(X_test) > 0.5).astype(int)
 print(classification_report(y_test, y_pred))
 
 # Save Model
-model.save("model.keras")
+model.save("model.h5")
 joblib.dump(scaler, "scaler.pkl")
 joblib.dump(le_dict, "encoder.pkl")
 
@@ -100,4 +100,3 @@ print(df['PerformanceRating'].unique())
 print(df['JobSatisfaction'].unique())
 print(df['EnvironmentSatisfaction'].unique())
 print(df['WorkLifeBalance'].unique())
-

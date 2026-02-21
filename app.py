@@ -8,10 +8,12 @@ import sqlite3
 app = Flask(__name__)
 
 # Load model and preprocessors
-model = load_model("model.keras")
-scaler = joblib.load("scaler.pkl")
-encoders = joblib.load("encoder.pkl")
+import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model = load_model(os.path.join(BASE_DIR, "model.h5"))
+scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
+encoders = joblib.load(os.path.join(BASE_DIR, "encoder.pkl"))
 
 # ---------- DATABASE ----------
 def init_db():
