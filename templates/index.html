@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Yogith Bharadwaj Employee Attrition Prediction Website</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Yogith Bharadwaj</h1>
+<h2>Employee Attrition Prediction Website</h2>
+
+<form action="/predict" method="POST">
+
+<label>Your Name</label>
+<input type="text" name="username"
+       placeholder="Enter your name" required>
+
+<label>Age (Example: 25 - 60)</label>
+<input type="number" name="age" placeholder="Enter employee age" required>
+
+<label>Marital Status</label>
+<select name="marital" required>
+<option value="">Select Marital Status</option>
+<option>Single</option>
+<option>Married</option>
+<option>Divorced</option>
+</select>
+
+<label>Monthly Income (Example: 3000 - 20000)</label>
+<input type="number" name="income"
+       placeholder="Enter monthly income" required>
+
+<label>Environment Satisfaction</label>
+<select name="env" required>
+<option value="">Select Environment Satisfaction</option>
+<option value="0">Low</option>
+<option value="1">Medium</option>
+<option value="2">High</option>
+<option value="3">Very High</option>
+</select>
+
+<label>Gender</label>
+<select name="gender" required>
+<option value="">Select Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+
+<label>Job Satisfaction</label>
+<select name="job" required>
+<option value="">Select Job Satisfaction</option>
+<option value="0">Low</option>
+<option value="1">Medium</option>
+<option value="2">High</option>
+<option value="3">Very High</option>
+</select>
+
+<label>Performance Rating</label>
+<select name="performance" required>
+<option value="">Select Performance Rating</option>
+<option value="0">Low</option>
+<option value="1">High</option>
+</select>
+
+<label>Work Life Balance</label>
+<select name="worklife" required>
+<option value="">Select Work Life Balance</option>
+<option value="0">Bad</option>
+<option value="1">Average</option>
+<option value="2">Good</option>
+<option value="3">Excellent</option>
+</select>
+
+<label>Years At Company</label>
+<input type="number" name="years" placeholder="Enter years at company" required>
+
+<button type="submit">Predict</button>
+
+</form>
+
+<h2 class="result">{{ prediction }}</h2>
+
+</div>
+
+</body>
+</html>

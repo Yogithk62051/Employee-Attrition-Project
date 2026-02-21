@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin - Past Users</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+<h2>Past Users Data (Admin)</h2>
+
+<table border="1" style="width:100%; text-align:center;">
+<tr>
+<th>Name</th>
+<th>Age</th>
+<th>Marital</th>
+<th>Income</th>
+<th>Gender</th>
+<th>Prediction</th>
+</tr>
+
+{% for row in data %}
+<tr>
+<td>{{ row[0] }}</td>  <!-- Name -->
+<td>{{ row[1] }}</td>  <!-- Age -->
+<td>{{ row[2] }}</td>  <!-- Marital -->
+<td>{{ row[3] }}</td>  <!-- Income -->
+<td>{{ row[4] }}</td>  <!-- Gender -->
+<td>{{ row[5] }}</td>  <!-- Prediction -->
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>
