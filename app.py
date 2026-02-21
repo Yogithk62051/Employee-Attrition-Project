@@ -1,42 +1,39 @@
 from flask import Flask, render_template, request
 import numpy as np
 import joblib
-from tensorflow.keras.models import load_model
 import sqlite3
 import pandas as pd
-
-
-
-# Initialize Flask
-app = Flask(__name__)
-
-# Load model and preprocessors
 import os
 
+# ===============================
+# INITIALIZE FLASK
+# ===============================
+app = Flask(__name__)
+
+# ===============================
+# LOAD MODEL & PREPROCESSORS
+# ===============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model = load_model(os.path.join(BASE_DIR, "model.h5"))
+
+model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
 scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
 encoders = joblib.load(os.path.join(BASE_DIR, "encoder.pkl"))
 
-# ---------- DATABASE ----------
+# ===============================
+# DATABASE
+# ===============================
 def init_db():
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
 
     c.execute('''CREATE TABLE IF NOT EXISTS users
                  (
-                     name
-                     TEXT,
-                     age
-                     INTEGER,
-                     marital
-                     TEXT,
-                     income
-                     INTEGER,
-                     gender
-                     TEXT,
-                     prediction
-                     TEXT
+                     name TEXT,
+                     age INTEGER,
+                     marital TEXT,
+                     income INTEGER,
+                     gender TEXT,
+                     prediction TEXT
                  )''')
 
     conn.commit()
@@ -44,14 +41,16 @@ def init_db():
 
 init_db()
 
-
-# ---------- HOME PAGE ----------
+# ===============================
+# HOME PAGE
+# ===============================
 @app.route('/')
 def home():
     return render_template("index.html")
 
-
-# ---------- PREDICTION ----------
+# ===============================
+# PREDICTION
+# ===============================
 @app.route('/predict', methods=['POST'])
 def predict():
 
@@ -67,19 +66,17 @@ def predict():
     worklife = request.form['worklife']
     years = int(request.form['years'])
 
-    # Convert dropdown values to numbers
+    # Convert dropdown values
     env_enc = int(env)
     job_enc = int(job)
     performance_enc = int(performance)
     worklife_enc = int(worklife)
 
-
-    # 2️⃣ Encode text → numbers
+    # 2️⃣ Encode text
     marital_enc = encoders['MaritalStatus'].transform([marital])[0]
     gender_enc = encoders['Gender'].transform([gender])[0]
 
-    # 3️⃣ Prepare input (FIXED VERSION)
-
+    # 3️⃣ Prepare input (DataFrame with feature names)
     feature_names = [
         "Age",
         "MaritalStatus",
@@ -99,11 +96,11 @@ def predict():
 
     data = scaler.transform(data)
 
-    # 4️⃣ Predict
-    pred = model.predict(data, verbose=0)[0][0]
-    result = "Leaving" if pred > 0.35 else "Retained"
+    # 4️⃣ Predict (sklearn MLP)
+    pred = model.predict(data)[0]
+    result = "Leaving" if pred == 1 else "Retained"
 
-    # 5️⃣ Save user input
+    # 5️⃣ Save to database
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
     c.execute("INSERT INTO users VALUES (?,?,?,?,?,?)",
@@ -113,8 +110,9 @@ def predict():
 
     return render_template("index.html", prediction=result)
 
-
-# ---------- HISTORY PAGE ----------
+# ===============================
+# HISTORY PAGE
+# ===============================
 @app.route('/history')
 def history():
     if request.args.get("key") != "yogithk62051":
@@ -128,7 +126,8 @@ def history():
 
     return render_template("history.html", data=data)
 
-
-# ---------- RUN APP ----------
+# ===============================
+# RUN APP
+# ===============================
 if __name__ == "__main__":
     app.run(debug=True)
