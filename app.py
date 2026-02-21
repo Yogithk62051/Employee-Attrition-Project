@@ -3,6 +3,9 @@ import numpy as np
 import joblib
 from tensorflow.keras.models import load_model
 import sqlite3
+import pandas as pd
+
+
 
 # Initialize Flask
 app = Flask(__name__)
@@ -75,15 +78,29 @@ def predict():
     marital_enc = encoders['MaritalStatus'].transform([marital])[0]
     gender_enc = encoders['Gender'].transform([gender])[0]
 
-    # 3️⃣ Prepare input
-    data = np.array([[age, marital_enc, income,
-                      env_enc, gender_enc, job_enc,
-                      performance_enc, worklife_enc, years]])
+    # 3️⃣ Prepare input (FIXED VERSION)
+
+    feature_names = [
+        "Age",
+        "MaritalStatus",
+        "MonthlyIncome",
+        "EnvironmentSatisfaction",
+        "Gender",
+        "JobSatisfaction",
+        "PerformanceRating",
+        "WorkLifeBalance",
+        "YearsAtCompany"
+    ]
+
+    data = pd.DataFrame([[age, marital_enc, income,
+                          env_enc, gender_enc, job_enc,
+                          performance_enc, worklife_enc, years]],
+                        columns=feature_names)
 
     data = scaler.transform(data)
 
     # 4️⃣ Predict
-    pred = model.predict(data)[0][0]
+    pred = model.predict(data, verbose=0)[0][0]
     result = "Leaving" if pred > 0.35 else "Retained"
 
     # 5️⃣ Save user input
