@@ -67,3 +67,23 @@ background:#5a67d8;
 color:#2c3e50;
 font-weight:bold;
 }
+
+/* ⭐ NEW RESULT BOX STYLE */
+.result-box{
+margin-top:20px;
+padding:20px;
+background:#f1f7ff;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+/* ⭐ AVATAR IMAGE STYLE */
+.avatar{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:10px;
+border:3px solid #667eea;
+}

@@ -81,8 +81,29 @@
 
 </form>
 
-<h2 class="result">{{ prediction }}</h2>
+{% if prediction %}
 
+<div class="result-box">
+
+    {% if gender == "Male" %}
+        <img src="{{ url_for('static', filename='images/male.jpeg') }}" class="avatar">
+    {% else %}
+        <img src="{{ url_for('static', filename='images/female.jpeg') }}" class="avatar">
+    {% endif %}
+
+    {% if prediction == "Retained" %}
+    <h2 style="color:green;">
+        😊 Good News! You are likely to STAY in the company.
+    </h2>
+{% else %}
+    <h2 style="color:red;">
+        ⚠️ Alert! You are likely to LEAVE the company.
+    </h2>
+{% endif %}
+
+</div>
+
+{% endif %}
 </div>
 
 </body>
